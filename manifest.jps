@@ -31,6 +31,7 @@ actions:
       docker run -d -p 80:8787 \
       -e PASSWORD=${globals.password} \
       --name rstudio \
+      --restart=always \
       rocker/rstudio
 
       #Checking of container is up and running 
