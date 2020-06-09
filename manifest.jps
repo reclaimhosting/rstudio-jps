@@ -1,0 +1,50 @@
+type: install
+id: rstudio
+name: R Studio
+homepage: https://rstudio.com/products/rstudio/
+baseUrl: https://raw.githubusercontent.com/reclaimhosting/rstudio-jps/master
+logo: images/rstudio-ball.svg
+
+description: 
+  text: R Studio is an integrated development environment (IDE) for R, a programming language for statistical computing and graphics. It includes a console, syntax-highlighting editor that supports direct code execution, as well as tools for plotting, history, debugging and workspace management.
+  
+categories:
+- apps/popular
+- apps/dev-tools
+- apps/e-learning
+
+globals:
+  password: ${fn.password}
+
+nodes:
+  nodeType: dockerengine
+  nodeGroup: cp
+  cloudlets: 16
+  extip: false
+  displayName: R Studio Server
+
+onInstall: setup
+
+actions:
+  setup:
+    cmd[cp]: |-
+      docker run -d -p 80:8787 \
+      -e PASSWORD=${globals.password} \
+      --name rstudio \
+      rocker/rstudio
+
+      #Checking of container is up and running 
+      until [ "`/usr/bin/docker inspect -f {{.State.Running}} rstudio`"=="true" ]; do
+        sleep 1
+        print '.'
+      done;
+
+      echo OK
+
+ssl: true
+skipNodeEmails: true
+    
+success: | 
+  **R Studio URL**: [https://${env.domain}/](https://${env.domain}/)  
+  **Username**: rstudio
+  **Password**: ${globals.password}
