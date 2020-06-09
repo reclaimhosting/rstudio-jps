@@ -3,7 +3,7 @@ id: rstudio
 name: R Studio
 homepage: https://rstudio.com/products/rstudio/
 baseUrl: https://raw.githubusercontent.com/reclaimhosting/rstudio-jps/master
-logo: images/rstudio-ball.svg
+logo: images/rstudio-ball.svg?sanitize=true
 
 description: 
   text: R Studio is an integrated development environment (IDE) for R, a programming language for statistical computing and graphics. It includes a console, syntax-highlighting editor that supports direct code execution, as well as tools for plotting, history, debugging and workspace management.
