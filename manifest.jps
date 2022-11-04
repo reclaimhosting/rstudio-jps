@@ -11,7 +11,7 @@ description:
 categories:
 - apps/popular
 - apps/dev-and-admin-tools
-- apps/e-learning
+- apps/education
 
 globals:
   password: ${fn.password}
@@ -22,6 +22,7 @@ nodes:
   cloudlets: 16
   extip: false
   displayName: R Studio Server
+  volumes: ["/root/workspace"]
 
 onInstall: setup
 
@@ -30,9 +31,12 @@ actions:
     cmd[cp]: |-
       docker run -d -p 80:8787 \
       -e PASSWORD=${globals.password} \
+      -e ROOT=true \
+      -v /root/rstudio_config:/home/rstudio/.config/rstudio \
+      -v /root/workspace:/home/rstudio/workspace \
       --name rstudio \
       --restart=always \
-      rocker/rstudio
+      rocker/tidyverse:4.0.5
 
       #Checking of container is up and running 
       until [ "`/usr/bin/docker inspect -f {{.State.Running}} rstudio`"=="true" ]; do
@@ -41,11 +45,16 @@ actions:
       done;
 
       echo OK
+    env.file.AddFavorite:
+        nodeGroup: cp
+        path: /root/workspace
+        keyword: workspace
+        isDir: true
 
 ssl: true
 skipNodeEmails: true
     
 success: | 
-  **R Studio URL**: [https://${env.domain}/](https://${env.domain}/)  
-  **Username**: rstudio
-  **Password**: ${globals.password}
+  - **R Studio URL**: [https://${env.domain}/](https://${env.domain}/)  
+  - **Username**: rstudio
+  - **Password**: ${globals.password}
