@@ -22,8 +22,6 @@ nodes:
   cloudlets: 16
   extip: false
   displayName: R Studio Server
-  volumes: ["/root/workspace"]
-
 onInstall: setup
 
 actions:
@@ -43,11 +41,6 @@ actions:
       done;
 
       echo OK
-    env.file.AddFavorite:
-        nodeGroup: cp
-        path: /root/workspace
-        keyword: workspace
-        isDir: true
 
 ssl: true
 skipNodeEmails: true
