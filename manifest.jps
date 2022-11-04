@@ -32,8 +32,6 @@ actions:
       docker run -d -p 80:8787 \
       -e PASSWORD=${globals.password} \
       -e ROOT=true \
-      -v /root/rstudio_config:/home/rstudio/.config/rstudio \
-      -v /root/workspace:/home/rstudio/workspace \
       --name rstudio \
       --restart=always \
       rocker/tidyverse:4.0.5
