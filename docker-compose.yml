@@ -7,7 +7,7 @@ services:
         ports:
             - '80:8787'
         environment:
-            - PASSWORD=reclaim4life
+            - PASSWORD=
             - DISABLE_AUTH=false
             - ROOT=true
             - USERID=1001
