@@ -22,25 +22,32 @@ nodes:
   cloudlets: 16
   extip: false
   displayName: R Studio Server
+  volumes: ["/root/rstudio"]
 onInstall: setup
 
 actions:
   setup:
-    cmd[cp]: |-
-      docker run -d -p 80:8787 \
-      -e PASSWORD=${globals.password} \
-      -e ROOT=true \
-      --name rstudio \
-      --restart=always \
-      rocker/tidyverse:4.0.5
+    - cmd[cp]: |-
+        mkdir -p /root/rstudio
+        cd /root/rstudio
+        wget https://raw.githubusercontent.com/reclaimhosting/rstudio-jps/master/docker-compose.yml
+        sed -i \
+            -e "s|PASSWORD=|PASSWORD=${globals.password}|g" \
+            docker-compose.yml
+        docker-compose up -d
 
-      #Checking of container is up and running 
-      until [ "`/usr/bin/docker inspect -f {{.State.Running}} rstudio`"=="true" ]; do
+        #Checking of container is up and running 
+        until [ "`/usr/bin/docker inspect -f {{.State.Running}} rstudio`"=="true" ]; do
         sleep 1
         print '.'
-      done;
+        done;
 
-      echo OK
+        echo OK
+    - env.file.AddFavorite:
+        nodeGroup: cp
+        path: /root/rstudio
+        keyword: rstudio
+        isDir: true
 
 ssl: true
 skipNodeEmails: true
